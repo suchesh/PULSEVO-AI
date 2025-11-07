@@ -1,0 +1,24 @@
+# === Core LangChain components ===
+langchain
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-groq
+
+# === Vector Store & Retrieval ===
+chromadb
+faiss-cpu
+
+# === PDF processing ===
+pypdf
+PyMuPDF
+
+# === Embeddings & Transformers ===
+sentence-transformers
+transformers
+
+# === Supporting utilities ===
+numpy
+scikit-learn
+python-dotenv
+tqdm

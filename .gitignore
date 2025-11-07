@@ -1,0 +1,6 @@
+__pycache__/
+.env
+vector_store/
+*.sqlite3
+*.pdf
+

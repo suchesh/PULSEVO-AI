@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PULSEVO AI</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+  />
+  <link
+    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+    rel="stylesheet"
+  />
+</head>
+<body>
+
+  <nav>
+    <img src="images/logo1.png" class="logo-img" />
+    <ul>
+      <li><a href="#">Terralogic AI</a></li>
+    </ul>
+  </nav>
+
+  <div class="toastalert"></div>
+
+  <div class="popup">
+    <header>
+      <span>File Uploader</span>
+      <div class="close"><i class='bx bx-exit'></i></div>
+    </header>
+    <div class="content">
+      <p>Upload required files</p>
+      <ul class="icons">
+        <input type="file" id="CommonUploader" accept=".pdf" hidden />
+        <input type="file" id="ExcelUploader" accept=".xls, .xlsx" hidden />
+        <input type="file" id="ImageUploader" accept=".png, .jpg, .jpeg" hidden />
+
+        <button id="PDF"><i class='bx bxs-file-pdf'></i></button>
+        <button id="EXCEL"><i class='bx bxs-spreadsheet'></i></button>
+        <button id="IMAGE"><i class='bx bx-image'></i></button>
+      </ul>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="header--title">
+      <h1>PULSEVO</h1>
+      <h2>How can I help you?</h2>
+    </div>
+  </header>
+
+  <section class="chats"></section>
+
+  <section class="prompt">
+    <div class="prompt--form">
+      <div class="prompt--input--wrapper">
+        <input
+          type="text"
+          placeholder="Enter your prompt here"
+          id="prompt--form--input"
+          class="prompt--form--input"
+          required
+        />
+        <button class="prompt--form--button" id="sendbutton">
+          <i class='bx bx-send'></i>
+        </button>
+        <button class="prompt--form--button" id="deleteButton">
+          <i class='bx bx-trash'></i>
+        </button>
+        <button class="prompt--form--button" id="filelinker">
+          <i class='bx bx-link'></i>
+        </button>
+      </div>
+    </div>
+    <p class="prompt--disclaimer">
+      PULSEVO AI may display inaccurate info — double check its responses.
+    </p>
+  </section>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="js/script.js"></script>
+
+</body>
+</html>
