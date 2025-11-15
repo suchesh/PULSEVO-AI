@@ -1,28 +1,49 @@
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Form
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
-import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 import os
+import uvicorn
 
-# Import your RAG logic (optional)
-import rag  
+# import RAG instance
+from rag import rag_instance
 
-app = FastAPI()
+app = FastAPI(title="Pulsevo AI Assistant")
 
-# Mount static directories
+# CORS (optional but useful)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# --------- STATIC FILES (Frontend) ---------
 app.mount("/css", StaticFiles(directory="css"), name="css")
 app.mount("/js", StaticFiles(directory="js"), name="js")
 app.mount("/images", StaticFiles(directory="images"), name="images")
 
-# Serve index.html
+# Serve the main webpage
 @app.get("/", response_class=HTMLResponse)
-def serve_home():
-    with open("index.html", "r", encoding="utf-8") as f:
-        return f.read()
+def home():
+    with open("index.html", "r", encoding="utf-8") as file:
+        return file.read()
 
+# --------- BACKEND API (RAG) ---------
+@app.post("/process_user_input", response_class=PlainTextResponse)
+async def process_user_input(prompt_form_input: str = Form(...)):
+    try:
+        answer = rag_instance.ask(prompt_form_input)
+        return f"💬 {answer}"
+    except Exception as e:
+        return f"❌ Error: {str(e)}"
+
+# --------- HEALTH CHECK ---------
 @app.get("/health")
-def health_check():
-    return {"status": "ok", "message": "FastAPI running on Vercel"}
+def health():
+    return {"status": "ok", "message": "Pulsevo AI FastAPI server running"}
 
+# Run locally
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=int(os.getenv("PORT", 8000)))

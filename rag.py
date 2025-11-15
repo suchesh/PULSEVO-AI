@@ -26,8 +26,7 @@ GROQ_KEY = os.getenv("GROQ_KEY")
 # EMBEDDING MANAGER
 # =============================
 class EmbeddingManager:
-        """Handles text embedding using SentenceTransformer."""
-    
+    """Handles text embedding using SentenceTransformer."""
     def __init__(self):
         print("🔹 Loading Embedding Model: all-MiniLM-L6-v2")
         self.model = SentenceTransformer("all-MiniLM-L6-v2")
