@@ -26,8 +26,8 @@ GROQ_KEY = os.getenv("GROQ_KEY")
 # EMBEDDING MANAGER
 # =============================
 class EmbeddingManager:
-    """Handles text embedding using SentenceTransformer."""
-
+        """Handles text embedding using SentenceTransformer."""
+    
     def __init__(self):
         print("🔹 Loading Embedding Model: all-MiniLM-L6-v2")
         self.model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -185,4 +185,152 @@ else:
     print("✅ Using existing vector DB.")
 
 
+
+
+
+# from langchain_groq import ChatGroq
+
+# # Load environment
+# load_dotenv()
+# GROQ_KEY = os.getenv("GROQ_KEY")
+# MONGO_URI = os.getenv("MONGO_URI")   # ✅ Add your MongoDB URI in .env
+# MONGO_DB = os.getenv("MONGO_DB", "company_db")
+# MONGO_COLLECTION = os.getenv("MONGO_COLLECTION", "company_data")
+
+
+# # =============================
+# # EMBEDDING MANAGER
+# # =============================
+# class EmbeddingManager:
+#     """Handles text embedding using SentenceTransformer."""
+
+#     def __init__(self):
+#         print("🔹 Loading Embedding Model: all-MiniLM-L6-v2")
+#         self.model = SentenceTransformer("all-MiniLM-L6-v2")
+
+#     def embed(self, texts):
+#         print(f"🧠 Generating embeddings for {len(texts)} chunks...")
+#         return np.array(self.model.encode(texts, show_progress_bar=False))
+
+
+# # =============================
+# # VECTOR DATABASE MANAGER
+# # =============================
+# class VectorStore:
+#     """Handles persistent vector storage and search using ChromaDB."""
+
+#     def __init__(self):
+#         os.makedirs("./vector_store", exist_ok=True)
+#         self.client = chromadb.PersistentClient(path="./vector_store")
+#         self.col = self.client.get_or_create_collection(name="company_docs")
+#         print(f"📦 DB Loaded: {self.col.count()} records")
+
+#     def add(self, docs, embeds):
+#         ids = [f"doc_{uuid.uuid4()}" for _ in docs]
+#         self.col.add(
+#             ids=ids,
+#             documents=docs,
+#             embeddings=embeds.tolist(),
+#             metadatas=[{"source": "mongodb"} for _ in docs]
+#         )
+#         print(f"✅ Added {len(docs)} docs to Vector DB. Now total: {self.col.count()}")
+
+#     def search(self, q_embed, k=3):
+#         """Query the vector store for top-k similar chunks."""
+#         return self.col.query(query_embeddings=[q_embed.tolist()], n_results=k)
+
+
+# # =============================
+# # RAG (Retrieve & Generate)
+# # =============================
+# class RAG:
+#     """Main RAG logic: fetch from MongoDB, embed, search, and generate conversational answers."""
+
+#     def __init__(self, api_key):
+#         self.embedder = EmbeddingManager()
+#         self.db = VectorStore()
+#         self.llm = ChatGroq(api_key=api_key, model="groq/compound-mini")
+#         self.mongo_client = MongoClient(MONGO_URI)
+#         self.mongo_collection = self.mongo_client[MONGO_DB][MONGO_COLLECTION]
+
+#     # ---------------------------
+#     # Build Knowledge Base from MongoDB
+#     # ---------------------------
+#     def build(self):
+#         """Fetch data from MongoDB, chunk, embed, and store in ChromaDB."""
+#         print("📡 Fetching documents from MongoDB...")
+
+#         docs = []
+#         for doc in self.mongo_collection.find({}, {"_id": 0}):
+#             text = " ".join(str(v) for v in doc.values() if isinstance(v, (str, int, float)))
+#             if text.strip():
+#                 docs.append(text)
+
+#         if not docs:
+#             print("⚠️ No MongoDB documents found.")
+#             return
+
+#         print(f"✅ Fetched {len(docs)} records from MongoDB.")
+
+#         # Optional: split into smaller chunks for better embeddings
+#         splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+#         chunks = []
+#         for text in docs:
+#             parts = splitter.split_text(text)
+#             chunks.extend(parts)
+
+#         print(f"🧩 Split into {len(chunks)} text chunks.")
+
+#         # Create embeddings
+#         embeds = self.embedder.embed(chunks)
+#         self.db.add(chunks, embeds)
+#         print("🚀 MongoDB-based RAG setup complete.")
+
+#     # ---------------------------
+#     # ASK A QUESTION
+#     # ---------------------------
+#     def ask(self, query, k=3):
+#         """Generate an intelligent answer using MongoDB + Chroma context."""
+#         print(f"\n🔎 Query: {query}")
+
+#         # Create query embedding
+#         q_embed = self.embedder.embed([query])[0]
+#         res = self.db.search(q_embed, k)
+
+#         # Build context
+#         context = ""
+#         if res.get("documents") and res["documents"][0]:
+#             context = "\n\n".join(res["documents"][0])
+
+#         # -----------------------------
+#         # Prompt
+#         # -----------------------------
+#         prompt = f"""
+# You are **SAI**, a professional AI assistant that summarizes and explains company data clearly.
+# Your responses are conversational, factual, and to the point.
+
+
+# 📊 **Context:**
+# {context if context else "No relevant data found in company database."}
+
+# 💬 **User Query:**
+# {query}
+
+# Now, respond in a clear and human tone.
+# """
+
+#         reply = self.llm.invoke(prompt)
+#         return reply.content.strip()
+
+
+# # =============================
+# # GLOBAL INSTANCE (For FastAPI)
+# # =============================
+# rag_instance = RAG(GROQ_KEY)
+
+# # If Chroma DB empty, build from Mongo
+# if rag_instance.db.col.count() == 0:
+#     rag_instance.build()
+# else:
+#     print("✅ Using existing vector DB from Mongo data.")
 

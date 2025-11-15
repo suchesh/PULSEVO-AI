@@ -22,3 +22,7 @@ numpy
 scikit-learn
 python-dotenv
 tqdm
+
+
+fastapi
+uvicorn
