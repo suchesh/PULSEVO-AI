@@ -13,7 +13,11 @@ import chromadb
 from pathlib import Path
 import numpy as np
 from langchain_community.document_loaders import PyMuPDFLoader
+<<<<<<< HEAD
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+=======
+from langchain.text_splitters import RecursiveCharacterTextSplitter
+>>>>>>> b07b71470d74c8a252d1690147fb29218a1e094e
 from sentence_transformers import SentenceTransformer
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
