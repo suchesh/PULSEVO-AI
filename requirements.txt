@@ -1,10 +1,9 @@
-# === Core LangChain components ===
+# === Core LangChain stack (Groq compatible) ===
 langchain
 langchain-core
 langchain-community
 langchain-text-splitters
 langchain-groq
-
 # === Vector Store & Retrieval ===
 chromadb
 faiss-cpu
@@ -17,12 +16,14 @@ PyMuPDF
 sentence-transformers
 transformers
 
-# === Supporting utilities ===
+# === Utilities ===
 numpy
 scikit-learn
 python-dotenv
 tqdm
 
-
+# === FastAPI ===
 fastapi
 uvicorn
+
+python-multipart
