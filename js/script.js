@@ -64,7 +64,7 @@ const requestapiresponse = async (incomingmessageelemet) => {
   formData.append("prompt_form_input", userInput);
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/process_user_input", {
+    const response = await fetch("https://pulsevo-ai.onrender.com/process_user_input", {
       method: "POST",
       body: formData,
     });
