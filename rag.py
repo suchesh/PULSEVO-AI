@@ -13,11 +13,7 @@ import chromadb
 from pathlib import Path
 import numpy as np
 from langchain_community.document_loaders import PyMuPDFLoader
-<<<<<<< HEAD
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-=======
-from langchain.text_splitters import RecursiveCharacterTextSplitter
->>>>>>> b07b71470d74c8a252d1690147fb29218a1e094e
 from sentence_transformers import SentenceTransformer
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
@@ -177,15 +173,6 @@ Avoid essays — reply like a professional who explains clearly in a chat.
         return reply.content.strip()
 
 
-# =============================
-# GLOBAL INSTANCE (For FastAPI)
-# =============================
-rag_instance = RAG(GROQ_KEY)
-
-if rag_instance.db.col.count() == 0:
-    rag_instance.build()
-else:
-    print("✅ Using existing vector DB.")
 
 
 
